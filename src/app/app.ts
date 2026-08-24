@@ -35,6 +35,28 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
+
+/*
+  --IMPORTANT CONCEPT ABOUT SIGNAL--
+  Before Signals, Angular used a library called Zone.js for change detection. 
+  Whenever anything happened—a click, a timer, or an API response—Zone.js would tell Angular, 
+  "Something changed somewhere, go check everything." 
+  
+  Angular would then scan the entire component tree from top to bottom, comparing old values with 
+  new values to see what needed updating. 
+
+  This is called coarse-grained change detection.
+  
+  With Signals:Instead of scanning the whole page, a Signal acts like a direct telephone wire 
+  from your TypeScript variable to the exact spot in the DOM where it is used.
+  
+  When the value inside title = signal('Qnopy') changes, 
+  the Signal instantly notifies Angular exactly where it is being read in the HTML.
+  Angular goes straight to that specific DOM node and flips the text. 
+  
+  It bypasses checking unrelated components completely. This is called fine-grained change detection, 
+  and it makes rendering incredibly fast.
+*/
 export class App {
   protected readonly title = signal('Qnopy');
 }
