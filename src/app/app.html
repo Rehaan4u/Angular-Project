@@ -7,9 +7,21 @@
 <!-- * * * * * * * to get started with your project! * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
+<!-- Structural Layer 1: Introductory Header Content -->
 <header>
-  <img src = "../assets/qnopy-logo.jpg" />
+  <img src="../assets/qnopy-logo.jpg" alt="Qnopy Logo" />
   <h1>Let's get started</h1>
-  <p>First time exploring Angualar</p>
+  <p>First time exploring Angular</p>
   <app-header></app-header>
+  <!-- NOTE: Only keep <app-header> here if this file is NOT the header component itself -->
 </header>
+
+<!-- Structural Layer 2: Main Content Component Layer -->
+<main>
+  <ul id="users">
+    <li>
+      <app-user></app-user>
+    </li>
+  </ul>
+</main>
+
