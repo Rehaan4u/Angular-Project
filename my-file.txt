@@ -1,0 +1,61 @@
+/*
+    It wasn't a change in index.html that triggered Zone.js. Instead, Zone.js watched the browser's JavaScript engine, 
+    and when it noticed an event finish running, it forced Angular to scan its own TypeScript components and update the DOM (HTML).
+    Here is exactly how that pre-signals process worked step-by-step:1. What Zone.js Actually Did (The Monkey Patcher)Zone.js 
+    is a library that hooks into the browser's lower-level code. It intercepts (or "monkey-patches") asynchronous browser operations. 
+    It explicitly listens for three types of triggers:User Events: Clicks, keypresses, mouse movements, or 
+    form submissions.Timers: setTimeout or setInterval.Network Requests: 
+    Fetching data from an API via javascript HttpClient or fetch.Zone.js did not know what changed; 
+    it just knew that an asynchronous function had finished executing.2. 
+    
+    The Flow: How Angular Updated the ScreenWhen Zone.js detected that an event finished, it would yell to Angular:
+     "Hey! A click event just finished running somewhere in the app. Go check if any data changed!"Because Angular had 
+     no way of knowing exactly which variable changed, it had to run a process called 
+     
+     Change Detection:[User Clicks Button] ──► [Zone.js catches it] ──► [Zone.js triggers Angular]
+                    [DOM / HTML Updated] ◄── [Angular re-renders] ◄── [Top-to-Bottom Component Scan]
+
+The Component Scan: Angular would start at the absolute root component (App) and scan every single active component 
+in your application from top to bottom.The Comparison: Angular did not compare the raw HTML text files. Instead, it kept a 
+lightweight virtual representation of your variables in memory. It would re-evaluate expressions like {{ title }} or 
+*ngIf="showMenu" and compare the new value against the old value stored during the last scan.The DOM Sync: 
+If Angular found a difference (e.g., title used to be 'A' but is now 'B'), 
+it would then execute precise DOM manipulation to update just that specific text node in the browser.
+
+Why Signals are a Game ChangerIn the Zone.js era, if you had 500 components on your page and you clicked a 
+button that changed a single number in just one component, Angular still had to execute checking logic across 
+all 500 components just to ensure nothing else accidentally changed.With Signals, Angular doesn't need Zone.js to 
+guess when an event finished, and it doesn't need to scan the whole component tree. The Signal itself tells Angular exactly 
+which component and which specific HTML template node needs to change, cutting out the global top-to-bottom scan entirely.
+*/
+
+/*
+    1. Compilation and Transpilation (Build Phase)
+
+        The compiler parses all .ts files and compiles them into standard JavaScript (.js).
+        The build tools bundle your code and append a script tag reference inside the main index.html file.
+
+    2. Root Bootstrapping (Initialization)
+
+        The web browser downloads and executes the compiled JavaScript bundle.
+        The script calls the bootstrapApplication(App, appConfig) core execution function.
+        This function initiates the Angular framework runtime and targets the root configuration class (App).
+        Angular searches the browser's initial DOM for a matching placeholder tag (the root selector, <app-root>).
+
+    3. Parent View ProjectionAngular instantiates the root App class.
+    
+        It reads the metadata attached to the class (templateUrl or template).
+        It loads the parent's HTML content and injects it directly inside the <app-root> tags in the browser's live DOM tree.
+        
+    4. Nested Template Parsing (Child Resolution)
+    
+        As Angular parses the parent HTML template, it encounters a nested custom HTML element matching a child component's selector
+         (e.g., <app-child>).Angular checks the parent class metadata's imports array to verify that the child class has been explicitly 
+         declared and permitted.If permitted, Angular instantiates the child class engine.It fetches the child component's template content 
+         and projects it cleanly into the DOM, directly inside the <app-child> tags
+    
+    5. Dynamic Rendering CompletionThe nested element hierarchy is finalized.
+    
+        The browser DOM reflects a fully organized tree of custom wrapper elements containing their respective view segments, 
+        fully responsive to asynchronous state changes.
+*/
