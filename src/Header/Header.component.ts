@@ -14,7 +14,8 @@ import {Component} from '@angular/core'
         without the need to be imported and registered into the @NgModule
         into the declaration array
     */
-    standalone: true
+    standalone: true , 
+    styleUrl: './header.component.css'
 })
 //the class should be in export mode, so that other files can import it
 export class HeaderComponent {} 

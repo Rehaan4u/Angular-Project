@@ -1,39 +1,40 @@
-header {
-  /* Resets browser margins and sets font styles for the entire page area */
+main {
+  width: 90%;
+  max-width: 50rem;
+  margin: 2.5rem auto;
+  display: grid;
+  grid-auto-flow: row;
+  gap: 2rem;
+}
+
+#users {
+  list-style: none;
   margin: 0;
-  font-family: sans-serif;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+  overflow: auto;
 }
 
-.brand-bar {
-  /* Restricts the cyan color exclusively to this title container box */
-  background-color: #00e5ff;
-  
-  /* Adds specific padding around the text inside the colored bar */
-  padding: 1.5rem 2rem;
-  
-  /* Adds a clear drop shadow underneath the colored bar */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.brand-bar h1 {
-  /* Resets standard browser text spacing */
+#fallback {
+  font-weight: bold;
+  font-size: 1.15rem;
   margin: 0;
-  
-  /* Styling for the text */
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: #111122; 
-  letter-spacing: -0.5px;
+  text-align: center;
 }
 
-.main-content {
-  /* Adds padding around the child area so content isn't flush with the screen edges */
-  padding: 2rem;
-}
+@media (min-width: 768px) {
+  main {
+    margin: 4rem auto;
+    grid-template-columns: 1fr 3fr;
+  }
 
-app-parent {
-  /* Ensures the parent component matches the core layout rules cleanly */
-  display: block;
-  width: 100%;
-}
+  #users {
+    flex-direction: column;
+  }
 
+  #fallback {
+    font-size: 1.5rem;
+    text-align: left;
+  }
+}

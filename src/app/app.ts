@@ -9,7 +9,8 @@
 */
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Parent } from '../parent-child/parent.component'
+// import { Parent } from '../parent-child/parent.component'
+import { HeaderComponent } from '../Header/Header.component';
 /*
   The @Component and class RelationshipYour takeaway is spot on. 
 
@@ -31,7 +32,7 @@ import { Parent } from '../parent-child/parent.component'
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Parent],
+  imports: [RouterOutlet, HeaderComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
