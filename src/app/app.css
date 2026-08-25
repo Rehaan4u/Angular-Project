@@ -1,0 +1,39 @@
+header {
+  /* Resets browser margins and sets font styles for the entire page area */
+  margin: 0;
+  font-family: sans-serif;
+}
+
+.brand-bar {
+  /* Restricts the cyan color exclusively to this title container box */
+  background-color: #00e5ff;
+  
+  /* Adds specific padding around the text inside the colored bar */
+  padding: 1.5rem 2rem;
+  
+  /* Adds a clear drop shadow underneath the colored bar */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.brand-bar h1 {
+  /* Resets standard browser text spacing */
+  margin: 0;
+  
+  /* Styling for the text */
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #111122; 
+  letter-spacing: -0.5px;
+}
+
+.main-content {
+  /* Adds padding around the child area so content isn't flush with the screen edges */
+  padding: 2rem;
+}
+
+app-parent {
+  /* Ensures the parent component matches the core layout rules cleanly */
+  display: block;
+  width: 100%;
+}
+

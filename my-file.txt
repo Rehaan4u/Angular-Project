@@ -59,3 +59,16 @@ which component and which specific HTML template node needs to change, cutting o
         The browser DOM reflects a fully organized tree of custom wrapper elements containing their respective view segments, 
         fully responsive to asynchronous state changes.
 */
+
+/*
+    A child component must not contain <html >, <head>, or <body> tags. 
+    
+    It should only contain structural HTML elements like <div>, <section>, <p>, or form tags.
+    Why Child Components Cannot Have Head/Body TagsAn HTML document can only have one <html>, one <head>, and one <body> tag. 
+    These global tags are already defined once in your main index.html file.
+    
+    Because Angular physically injects the child component's template deep inside the parent component, 
+    adding those tags to a child component would break the rules of valid HTML. 
+    It would cause the browser to see a <body> tag nested inside another <body> tag, resulting in rendering glitches, 
+    broken CSS styles, and invalid DOM structures.
+*/
