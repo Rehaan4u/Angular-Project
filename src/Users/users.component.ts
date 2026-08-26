@@ -17,7 +17,8 @@ export class Users {
         return '../assets/Users/' + this.selectUser.avatar
     }
     onClick() {
-        console.log(`Clicked`)
+        const randomUser=Math.floor(Math.random()* DUMMY_USERS.length)
+        this.selectUser = DUMMY_USERS[randomUser]
     }
 
 }
