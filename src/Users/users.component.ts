@@ -11,6 +11,13 @@ const randomUser=Math.floor(Math.random()* DUMMY_USERS.length)
 })
 
 export class Users { 
-    selectUser=DUMMY_USERS[randomUser];
+    public selectUser=DUMMY_USERS[randomUser];
+
+    get imagePath() {
+        return '../assets/Users/' + this.selectUser.avatar
+    }
+    onClick() {
+        console.log(`Clicked`)
+    }
 
 }
