@@ -12,8 +12,9 @@ import { RouterOutlet } from '@angular/router';
 // import { Parent } from '../parent-child/parent.component'
 import { HeaderComponent } from '../Header/Header.component';
 import { Users } from '../Users/users.component'
+import { DUMMY_USERS } from '../Users/dummyUsers';
 /*
-  The @Component and class RelationshipYour takeaway is spot on. 
+  The @Component and class Relationship ,your takeaway is spot on. 
 
   A component requires both visual presentation (HTML/CSS) and logical control (TypeScript).
   The class acts as the blueprint for the component's state and internal backend logic.
@@ -33,6 +34,8 @@ import { Users } from '../Users/users.component'
 
 @Component({
   selector: 'app-root',
+  //imports is only used for mentioning the components that are
+  //going to be mentioned in the app.html
   imports: [RouterOutlet, HeaderComponent, Users],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -60,5 +63,5 @@ import { Users } from '../Users/users.component'
   and it makes rendering incredibly fast.
 */
 export class App {
-  protected readonly title = signal('Qnopy');
+  users = DUMMY_USERS
 }

@@ -1,8 +1,8 @@
-import { Component } from '@angular/core'
-import { DUMMY_USERS } from './dummyUsers'
+//We are importing the Input from the angualr/core
+import { Component, Input} from '@angular/core'
+// import { DUMMY_USERS } from './dummyUsers'
 import { signal, computed} from '@angular/core'
 
-const randomUser=Math.floor(Math.random()* DUMMY_USERS.length)
 
 @Component({
     selector: 'app-user' ,
@@ -12,17 +12,15 @@ const randomUser=Math.floor(Math.random()* DUMMY_USERS.length)
 })
 
 export class Users { 
-    public selectUser=signal(DUMMY_USERS[randomUser]);
-    public imageUrl= computed(() => {return '../assets/Users/' 
-        + this.selectUser().avatar
-    })
+    /*
+        We use {required :true}, because here we have declared
+        avatar with an "!", so what required does, if the devloepr forgets
+        to bind the [avatar] with a value then compiler will throw error
+    */
+    @Input({required: true}) avatar!:string;
+    @Input({required: true}) name!: string;
 
-    // get imageUrl() {
-    //     return '../assets/Users/' + this.selectUser.avatar
-    // }
-    onClick() {
-        const randomUser=Math.floor(Math.random()* DUMMY_USERS.length)
-        this.selectUser.set(DUMMY_USERS[randomUser])
+    get imagePath() { 
+        return '../assets/Users/' + this.avatar
     }
-
 }
