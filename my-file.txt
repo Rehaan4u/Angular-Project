@@ -250,4 +250,46 @@ and new EventEmitter() is the actual object instance that does the emitting. Two
  sits in between.
 (select)="onSelect($event)" — correct, and worth noting $event is an Angular template-syntax special variable that always holds the payload 
 from whatever event (native or custom) you're binding to.
+
+*/
+
+/*
+                            ---- @Input — what it actually does ----
+
+Better framing: @Input() marks a class property as bindable from the parent's template. That's it — one job. 
+But this connects to the selector in a specific way, which is probably what you're sensing:
+
+The @Component({ selector: 'app-child' }) defines the tag name (<app-child>) that the parent uses to place this component in its HTML.
+@Input() on a property (say imageUrl) means: when someone writes <app-child [imageUrl]="someValue"> in a parent's template,
+ Angular knows imageUrl is a legal property binding target on that tag — and it assigns someValue to this.imageUrl inside the child instance.
+
+So it's not that @Input "makes the variable the underlying property of the custom HTML element" exactly — rather, 
+the selector creates the custom element, and @Input opens up specific properties on that element as bindable targets. 
+Without @Input, Angular would reject [imageUrl]="..." as an unknown property on <app-child>.
+
+Ensuring the right child gets the right value — yes, this is just standard template binding: 
+each <app-child> instance in the parent's template gets its own binding:
+
+html
+<app-child [imageUrl]="photo1.url"></app-child>
+<app-child [imageUrl]="photo2.url"></app-child>
+
+Each instance receives its own value independently — there's no ambiguity because each tag usage has its own binding expression.
+
+Using it in the child's template — correct, e.g.:
+
+html
+<!-- child.component.html -->
+<img [src]="imageUrl">
+@Output — your description is accurate
+
+Yes, exactly as you said:
+
+Child creates select = new EventEmitter<T>() via @Output().
+Child writes a method that calls this.select.emit(value), wired to a native event like (click).
+Parent binds (select)="onSelect($event)" — same name as declared in the child — and $event carries the emitted value.
+One-line summary
+	Direction	Mechanism	Binding syntax
+@Input	Parent → Child	Opens a property for external binding	[propName]="value"
+@Output	Child → Parent	Exposes an EventEmitter to fire custom events	(eventName)="handler($event)"
 */
