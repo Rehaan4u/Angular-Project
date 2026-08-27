@@ -99,3 +99,56 @@ By adding attr in front of the attribute name you want to bind dynamically, you'
 find a property with the specified name but instead bind the respective attribute - in the example above, the aria-valuenow and aria-valuemax 
 attributes would be bound dynamically.
 */
+
+/*
+    Yes, You Are Creating Your Own Custom DOM Properties!
+    
+    When you build a custom Angular component (like <app-user>), Angular registers that component with the browser 
+    as a custom HTML element.By using the @Input() decorator (or the modern input() signal syntax), you are telling 
+    Angular:"Hey, add a brand new, custom property called avatar to this custom DOM element's JavaScript object.
+    "Because Angular expands the browser's vocabulary, [avatar] becomes a legitimate DOM property binding for that specific
+    custom element.Attributes vs. Properties (Why we need [] here)
+
+    like <img [src]>, img is the html tag and src is it underlying property, similarly
+    <app-user [avatar]> is that custom html element added dinto tthe browsers DOM, and avatar is its new underlying Property
+
+    The key difference from the img case: native elements automatically expose all their DOM properties for binding 
+    — Angular doesn't need you to declare anything. Custom components don't expose any property for binding unless you 
+    explicitly decorate it with @Input(). So [avatar] only works because you opted in.
+
+    So your mental model — "the thing in brackets is a property on the underlying object" — is correct for both. 
+    Just remember:
+    For native elements: it's any DOM property, automatically available.
+    For custom components: it's only properties you've explicitly flagged with @Input().
+    
+    Just like native HTML elements, your custom component deals with the difference between string attributes and dynamic properties: 
+    1. Without brackets (Static Attribute Binding)
+    If you omit the square brackets, you are passing a literal, 
+    static string directly to the attribute. Angular does not evaluate it as code.html
+    <!-- The avatar variable inside the component gets the literal string "user.png" -->
+                    <app-user avatar="user.png"></app-user> 
+
+    
+    
+    2. With brackets [] (Dynamic Property Binding)
+    When you add [avatar], you tell Angular to look at the component class, find the dynamic variable or object property, 
+    and pass its live value into your custom property.
+    html<!-- Angular evaluates 'activeUser.imagePath' and passes the dynamic string or object -->
+    <app-user [avatar]="activeUser.imagePath"></app-user>
+
+    What does the ! mean in avatar!?
+    Since you mentioned declaring it with an exclamation mark (avatar!), 
+    this is a TypeScript tool called the Definite Assignment Assertion.Because TypeScript compiles your code before the application 
+    runs in the browser, it looks at your class and panics: "Wait! You created an avatar variable, but you didn't give it a starting value! 
+    It's going to be undefined!"By writing avatar!, you are telling TypeScript: "Trust me, I know it doesn't have a value right now, 
+    but Angular is going to inject a value into it at runtime from the HTML template via property binding.
+    
+    "The Modern Way: Signal InputsSince we were just discussing signals, Angular actually introduced a brand new way to handle 
+    inputs that completely removes the need for the ! operator and turns your inputs into signals!
+    
+    Instead of the old decorator syntax:typescript@Input() avatar!: string; // Old way
+    .You can now write it using Signal Inputs:typescriptavatar = input.required<string>(); // Modern way! No '!' needed.
+
+    Now, avatar behaves exactly like the signals we discussed earlier. 
+    In your component template, you would read it by calling it like a function: {{ avatar() }}.
+*/
