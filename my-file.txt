@@ -143,7 +143,8 @@ attributes would be bound dynamically.
     It's going to be undefined!"By writing avatar!, you are telling TypeScript: "Trust me, I know it doesn't have a value right now, 
     but Angular is going to inject a value into it at runtime from the HTML template via property binding.
     
-    "The Modern Way: Signal InputsSince we were just discussing signals, Angular actually introduced a brand new way to handle 
+    "The Modern Way: Signal Inputs
+    Since we were just discussing signals, Angular actually introduced a brand new way to handle 
     inputs that completely removes the need for the ! operator and turns your inputs into signals!
     
     Instead of the old decorator syntax:typescript@Input() avatar!: string; // Old way
@@ -151,4 +152,52 @@ attributes would be bound dynamically.
 
     Now, avatar behaves exactly like the signals we discussed earlier. 
     In your component template, you would read it by calling it like a function: {{ avatar() }}.
+*/
+
+/*
+                                     ---  @Input({required: true}) vs input.required<string>() ---
+
+What they are
+
+@Input() is a decorator applied to a regular class property.
+input() / input.required() is a function that creates a signal — specifically a read-only InputSignal<T>.
+
+How values get in (same for both)
+Both are set from the parent template the same way:
+
+html
+<my-comp [myProp]="someValue"></my-comp>
+
+Angular assigns the incoming binding to the property/signal regardless of which style you use.
+
+How you read/access them (different)
+
+Decorator-based: access directly, no parens — this.myProp
+Signal-based: it's a signal, so you must invoke it as a function — this.myProp()
+
+This is the one you flagged, and it's important — forgetting () on a signal input won't error at compile time in an obvious way, 
+you'll just be working with the Signal object instead of its value.
+
+Can you reassign it inside the component? (key difference)
+
+@Input() (decorator): it's just a normal property, so nothing stops you from doing this.myProp = 'newValue' inside your own class logic. 
+Angular won't complain — you're free to mutate it after it comes in.
+
+input.required(): it's strictly read-only from inside the class. There's no .set() or .update() on it (unlike a regular writable signal()). 
+You cannot reassign this.myProp at all. The only way its value changes is if the parent updates the bound expression and passes a new value down.
+
+Why this matters (trade-off)
+
+Decorator gives you flexibility: you can normalize/override the incoming value inside the component if needed.
+Signal input trades that flexibility for safety: it enforces one-way data flow strictly, 
+so you can't accidentally desync the child's internal state from what the parent thinks it passed. 
+If you do need a locally-modifiable derived value, the idiomatic pattern is to feed it into a computed() or copy it into your own signal().
+
+Quick summary table
+
+	                          @Input({required:true})	    input.required<string>()
+Type	                        Decorator on property	     Function returning signal
+Set from parent	                  ✅ same binding syntax	    ✅ same binding syntax
+Read syntax	                            this.prop	              this.prop()
+Reassignable inside class	                ✅ Yes	              ❌ No (read-only)
 */
