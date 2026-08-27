@@ -64,4 +64,8 @@ import { DUMMY_USERS } from '../Users/dummyUsers';
 */
 export class App {
   users = DUMMY_USERS
+
+  outputId(id:string) {
+    console.log(`This user has id as: ` + id)
+  }
 }
