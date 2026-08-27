@@ -201,3 +201,53 @@ Set from parent	                  ✅ same binding syntax	    ✅ same binding s
 Read syntax	                            this.prop	              this.prop()
 Reassignable inside class	                ✅ Yes	              ❌ No (read-only)
 */
+
+/*
+                        ----The full flow: Child → Parent custom event----
+
+                            1. Child component: declare the output
+
+typescript
+export class ChildComponent {
+  @Output() select = new EventEmitter<SomeType>();
+}
+
+This creates a custom event named select that the outside world (parent) can bind to, just like it binds to native events like click.
+
+                            2. Child component: trigger it on some native event
+
+html
+<!-- child.component.html -->
+<button (click)="onButtonClick()">Choose</button>
+typescript
+onButtonClick() {
+  this.select.emit(this.someValue); // 'this.someValue' can be anything — an Input, local state, etc.
+}
+
+So the native (click) triggers your own method, and inside that method you call .emit() on the EventEmitter object to fire your 
+custom event with whatever payload you choose.
+
+                            3. Parent component: listen for the custom event
+
+html
+<!-- parent.component.html -->
+<app-child (select)="onSelect($event)"></app-child>
+
+Here select matches the property name you gave the EventEmitter in the child (not some fixed keyword — it's however you named it). $event 
+automatically carries whatever value was passed to .emit().
+
+                            4. Parent component: handle it
+
+typescript
+onSelect(value: SomeType) {
+  // do something with the emitted value
+}
+Small corrections to your phrasing
+You said "create a custom object" for @Output — more precisely, @Output() is the decorator that registers the property as an event source, 
+and new EventEmitter() is the actual object instance that does the emitting. Two parts, one purpose.
+"the native ones like (click)... and then pass that method into this" — to be precise: you bind the native event to your own handler method
+ (onButtonClick()), and inside that handler you call .emit(). The native event doesn't get "passed into" EventEmitter directly; your method 
+ sits in between.
+(select)="onSelect($event)" — correct, and worth noting $event is an Angular template-syntax special variable that always holds the payload 
+from whatever event (native or custom) you're binding to.
+*/
