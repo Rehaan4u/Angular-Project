@@ -293,3 +293,31 @@ One-line summary
 @Input	Parent → Child	Opens a property for external binding	[propName]="value"
 @Output	Child → Parent	Exposes an EventEmitter to fire custom events	(eventName)="handler($event)"
 */
+
+/*
+                                --- Steps to use service ---
+
+        1. Creating the Service (The Provider)Your inference is spot-on. 
+
+        To make a file a service:You import Injectable from @angular/core.You apply the @Injectable({ providedIn: 'root' }) decorator. 
+        The providedIn: 'root' part is the magic that tells Angular, "Create one single instance of this service (a singleton) and 
+        make it available across the entire app.
+        
+        "You declare and export the class right below it.2. Using the Service (The Consumer)
+        
+        You import the service class into your component file.You declare it inside the component's constructor().
+        The Magic Step: When you write constructor(private myService: UserDetailsService), Angular reads that type, 
+        automatically instantiates the object behind the scenes, and assigns it to your myService variable.
+        
+        You can immediately use this.myService.someMethod() anywhere inside that component.
+        One Small Angular TipWhen you declare the variable in the constructor, always make sure to add an access modifier 
+        
+        like private or public right before the variable name, 
+        like this:typescriptconstructor(private userDetails: UserDetailsService) {}
+
+        Adding private or public is a TypeScript shortcut. 
+        It tells the computer to automatically create a property on the class and assign the instantiated service object 
+        to it. 
+        
+        Without private or public, you won't be able to access this.userDetails in other methods of your component.
+*/
